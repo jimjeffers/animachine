@@ -6,7 +6,7 @@ import union from 'lodash/array/union'
 
 export default class Keylines extends React.Component {
   shouldComponentUpdate() {
-    return false //!this.props.timeline.isPlaying
+    return !this.props.timeline.isPlaying
   }
 
   renderPointerLine({height}) {
@@ -28,6 +28,7 @@ export default class Keylines extends React.Component {
   }
 
   render() {
+    console.time('calc keylines data')
     const {timeline, actions, selectors, style} = this.props
     const {start} = timeline
     const end = start + getVisibleTime({timeline})
@@ -90,7 +91,6 @@ export default class Keylines extends React.Component {
       children.push(<Keyline
         {...{timeline, actions, selectors}}
         top = {pos}
-        style = {{left: 0, top: pos}}
         height = {height}
         keyHolderId = {keyHolderId}
         easeSequences = {easeSequences}
@@ -115,6 +115,7 @@ export default class Keylines extends React.Component {
       }}
     ]
 
+    console.timeEnd('calc keylines data')
     return <ContextMenu items={menuItems}>
       <div style={{...style, position: 'relative'}}>
         {children}
